@@ -38,4 +38,4 @@ RUN cd chrono/build && cmake ../ -G Ninja \
  -DEigen3_DIR=/usr/lib/cmake/eigen3 \
  && ninja && ninja install
 
-ENTRYPOINT ["/bin/bash cd demos"]
+ENTRYPOINT ["/bin/bash"]
