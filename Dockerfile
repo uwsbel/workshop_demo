@@ -10,7 +10,7 @@ RUN DEBIAN_FRONTEND=noninteractive
 WORKDIR /root/sbel
 
 #chrono dependency installed here
-RUN apt update && apt install -y --no-install-recommends --allow-unauthenticated libnvidia-gl-515 cmake cmake-curses-gui freeglut3-dev mesa-common-dev wget libglfw3 libglfw3-dev x11proto-gl-dev swig git libxxf86vm-dev libglew-dev openmpi-common libopenmpi-dev ninja-build
+RUN apt update && apt install -y --no-install-recommends --allow-unauthenticated libeigen3-dev cmake cmake-curses-gui mesa-common-dev wget git ninja-build
 
 # Clean up to reduce image size
 RUN ldconfig && apt-get autoclean -y && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
