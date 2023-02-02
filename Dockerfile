@@ -7,12 +7,10 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ /etc/timezone
 
 RUN DEBIAN_FRONTEND=noninteractive
 
-RUN apt update && apt install -y --no-install-recommends --allow-unauthenticated git curl gnupg2 lsb-release
-
 WORKDIR /root/sbel
 
 #chrono dependency installed here
-RUN apt update && apt install -y --no-install-recommends --allow-unauthenticated libnvidia-gl-515 libeigen3-dev cmake cmake-curses-gui libglu1-mesa-dev freeglut3-dev mesa-common-dev wget swig libglfw3 libglfw3-dev x11proto-gl-dev glew-utils git libxxf86vm-dev libglew-dev openmpi-common libopenmpi-dev ninja-build
+RUN apt update && apt install -y --no-install-recommends --allow-unauthenticated libnvidia-gl-515 cmake cmake-curses-gui libglu1-mesa-dev freeglut3-dev mesa-common-dev wget libglfw3 libglfw3-dev x11proto-gl-dev glew-utils git libxxf86vm-dev libglew-dev openmpi-common libopenmpi-dev ninja-build
 
 # Clean up to reduce image size
 RUN ldconfig && apt-get autoclean -y && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
