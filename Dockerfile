@@ -19,7 +19,7 @@ RUN git clone --recursive https://github.com/projectchrono/chrono.git -b release
 RUN git clone https://github.com/uwsbel/workshop_demo.git
 RUN cp -f workshop_demo/chrono_source_files/Ch* chrono/src/chrono_fsi/ && \
   cp -f workshop_demo/chrono_source_files/Viper.cpp chrono/src/chrono_models/robot/viper/
-RUN mv workshop_demo/chrono_source_files/demos . && rm -rf workshop_demo
+RUN mv workshop_demo/demos . && rm -rf workshop_demo
 
 RUN mkdir chrono/build
 RUN cd chrono/build && cmake ../ -G Ninja \
