@@ -36,6 +36,7 @@ RUN cd chrono/build && cmake ../ -G Ninja \
  -DENABLE_MODULE_VEHICLE=ON \
  -DENABLE_MODULE_FSI=ON \
  -DEigen3_DIR=/usr/lib/cmake/eigen3 \
+ -DCUDA_ARCH_NAME=All \
  && ninja && ninja install
 
 ENTRYPOINT ["/bin/bash"]
