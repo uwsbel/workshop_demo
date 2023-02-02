@@ -10,20 +10,16 @@ RUN DEBIAN_FRONTEND=noninteractive
 WORKDIR /root/sbel
 
 #chrono dependency installed here
-RUN apt update && apt install -y --no-install-recommends --allow-unauthenticated libnvidia-gl-515 cmake cmake-curses-gui libglu1-mesa-dev freeglut3-dev mesa-common-dev wget libglfw3 libglfw3-dev x11proto-gl-dev glew-utils git libxxf86vm-dev libglew-dev openmpi-common libopenmpi-dev ninja-build
+RUN apt update && apt install -y --no-install-recommends --allow-unauthenticated libnvidia-gl-515 cmake cmake-curses-gui freeglut3-dev mesa-common-dev wget libglfw3 libglfw3-dev x11proto-gl-dev swig git libxxf86vm-dev libglew-dev openmpi-common libopenmpi-dev ninja-build
 
 # Clean up to reduce image size
 RUN ldconfig && apt-get autoclean -y && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 RUN git clone --recursive https://github.com/projectchrono/chrono.git -b release/8.0
-RUN git clone https://github.com/uwsbel/public-metadata.git
-# RUN cp -f public-metadata/2022/CRM_Vs_NASA_Exp/sim_scripts/ChBce.cu chrono/src/chrono_fsi/physics/ChBce.cu &&
-#     cp -f public-metadata/2022/CRM_Vs_NASA_Exp/sim_scripts/ChBce.cuh chrono/src/chrono_fsi/physics/ChBce.cuh &&
-#     cp -f public-metadata/2022/CRM_Vs_NASA_Exp/sim_scripts/ChSystemFsi.cpp chrono/src/chrono_fsi/ChSystemFsi.cpp &&
-#     cp -f public-metadata/2022/CRM_Vs_NASA_Exp/sim_scripts/ChSystemFsi.h chrono/src/chrono_fsi/ChSystemFsi.h &&
-#     cp -f public-metadata/2022/CRM_Vs_NASA_Exp/sim_scripts/Viper.cpp chrono/src/chrono_models/robot/viper/Viper.cpp &&
-#     cp -f public-metadata/2022/CRM_Vs_NASA_Exp/sim_scripts/Viper.h chrono/src/chrono_models/robot/viper/Viper.h &&
-
+RUN git clone https://github.com/uwsbel/workshop_demo.git
+RUN cp -f workshop_demo/chrono_source_files/Ch* chrono/src/chrono_fsi/ && \
+  cp -f workshop_demo/chrono_source_files/Viper.cpp chrono/src/chrono_models/robot/viper/
+RUN mv workshop_demo/chrono_source_files/demos . && rm -rf workshop_demo
 
 RUN mkdir chrono/build
 RUN cd chrono/build && cmake ../ -G Ninja \
@@ -42,4 +38,4 @@ RUN cd chrono/build && cmake ../ -G Ninja \
  -DEigen3_DIR=/usr/lib/cmake/eigen3 \
  && ninja && ninja install
 
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/bin/bash cd demos"]
