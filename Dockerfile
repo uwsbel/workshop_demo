@@ -10,7 +10,7 @@ RUN DEBIAN_FRONTEND=noninteractive
 WORKDIR /root/sbel
 
 #chrono dependency installed here
-RUN apt update && apt install -y --no-install-recommends --allow-unauthenticated libeigen3-dev cmake cmake-curses-gui mesa-common-dev wget git ninja-build
+RUN apt update && apt install -y --no-install-recommends --allow-unauthenticated libeigen3-dev cmake cmake-curses-gui mesa-common-dev wget git ninja-build vim
 
 # Clean up to reduce image size
 RUN ldconfig && apt-get autoclean -y && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
@@ -25,7 +25,7 @@ RUN mkdir chrono/build
 RUN cd chrono/build && cmake ../ -G Ninja \
  -DCMAKE_BUILD_TYPE=Release \
  -DBUILD_BENCHMARKING=OFF \
- -DBUILD_DEMOS=ON \
+ -DBUILD_DEMOS=OFF \
  -DBUILD_TESTING=OFF \
  -DENABLE_MODULE_IRRLICHT=OFF \
  -DENABLE_MODULE_POSTPROCESS=OFF \
@@ -37,5 +37,26 @@ RUN cd chrono/build && cmake ../ -G Ninja \
  -DENABLE_MODULE_FSI=ON \
  -DEigen3_DIR=/usr/lib/cmake/eigen3 \
  && ninja && ninja install
+
+RUN mkdir demos/single_wheel_vv_mode/build
+RUN cd demos/single_wheel_vv_mode/build && cmake ../ . -G Ninja \
+-DCMAKE_BUILD_TYPE=Release \
+-DChrono_DIR=/root/sbel/chrono/build/cmake \
+&& ninja
+
+RUN mkdir demos/single_wheel_real_slope_mode/build
+RUN cd demos/single_wheel_real_slope_mode/build && cmake ../ . -G Ninja \
+-DCMAKE_BUILD_TYPE=Release \
+-DChrono_DIR=/root/sbel/chrono/build/cmake \
+&& ninja
+
+RUN mkdir demos/viper_real_slope/build
+RUN cd demos/viper_real_slope/build && cmake ../ . -G Ninja \
+-DCMAKE_BUILD_TYPE=Release \
+-DChrono_DIR=/root/sbel/chrono/build/cmake \
+&& ninja
+
+
+
 
 ENTRYPOINT ["/bin/bash"]
