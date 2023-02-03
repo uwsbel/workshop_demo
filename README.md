@@ -4,6 +4,18 @@ The Chrono demos are containerized with Docker. Here are some instructions how t
 ## Installation
 Open a terminal in your machine then run 
 
+```git clone https://github.com/uwsbel/workshop_demo.git && cd workshop_demo```
+
+Once getting into folder, running the following to build docker image from Dockerfile:
+
+``` docker build -t <img_name> . ```
+
+Notice that you can put a tag name for the image you build by using flag -t. After building it, run a container using the command:
+
+```docker run -it --gpus all <img_name> ```
+
+You should be get into container. To run the demo, go to directory ``` /root/sbel/chrono/build/bin/```, the executable demos are in this folder.
+
 
 ## Run the demo
 - ./demo_FSI_SingleWheelTest_VV_mode 17.5 0.3 3
