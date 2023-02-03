@@ -45,7 +45,7 @@ double slope_angle; // Terrain slope
 double total_mass; // 1.0 means using default mass 440kg
 
 // output directories and settings
-std::string out_dir = GetChronoOutputPath() + "FSI_Viper_RealSlope_SlopeAngle_";
+std::string out_dir = "FSI_Viper_RealSlope_SlopeAngle_";
 
 // Dimension of the space domain
 double bxDim = 6.0;
@@ -80,7 +80,7 @@ double wheel_wide = 0.2;
 double grouser_height = 0.025;
 double grouser_wide = 0.005;
 int grouser_num = 24;
-double wheel_AngVel = 0.8;
+double wheel_AngVel = 0.3265;
 
 // Pointer to store the VIPER instance
 std::shared_ptr<Viper> rover;
@@ -127,6 +127,9 @@ void SaveParaViewFiles(ChSystemFsi& sysFSI, ChSystemNSC& sysMBS, double mTime);
 void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI);
 
 int main(int argc, char* argv[]) {
+    
+    SetChronoDataPath(CHRONO_DATA_DIR);
+
     // Create a physical system and a corresponding FSI system
     ChSystemNSC sysMBS;
     ChSystemFsi sysFSI(&sysMBS);

@@ -44,6 +44,7 @@ using namespace chrono::geometry;
 double iniSpacing;
 double kernelLength;
 double density;
+double slope_angle; // Terrain slope 
 
 // Dimension of the terrain container
 double smalldis = 1.0e-9;
@@ -81,7 +82,7 @@ bool output = true;
 int out_fps = 20;
 
 // Output directories and settings
-std::string out_dir = GetChronoOutputPath() + "FSI_Single_Wheel_Test_VV_mode_slip";
+std::string out_dir = "FSI_Single_Wheel_Test_RealSlope_mode_slope";
 
 // Enable/disable run-time visualization (if Chrono::OpenGL is available)
 bool render = true;
@@ -204,7 +205,7 @@ void CreateSolidPhase(ChSystemSMC& sysMBS, ChSystemFsi& sysFSI) {
 
     // Create the chassis -- always THIRD body in the system
     auto chassis = chrono_types::make_shared<ChBody>();
-    chassis->SetMass(total_mass * 1.0 / 2.0);
+    chassis->SetMass(2.0);
     chassis->SetPos(wheel->GetPos());
     chassis->SetCollide(false);
     chassis->SetBodyFixed(false);
@@ -234,15 +235,15 @@ void CreateSolidPhase(ChSystemSMC& sysMBS, ChSystemFsi& sysFSI) {
     prismatic1->SetName("prismatic_chassis_ground");
     sysMBS.AddLink(prismatic1);
 
-    double velocity = wheel_vel; //wheel_AngVel * wheel_radius * (1.0 - wheel_slip);
-    auto actuator_fun = chrono_types::make_shared<ChFunction_Ramp>(0.0, velocity);
+    // double velocity = wheel_vel; //wheel_AngVel * wheel_radius * (1.0 - wheel_slip);
+    // auto actuator_fun = chrono_types::make_shared<ChFunction_Ramp>(0.0, velocity);
 
-    actuator->Initialize(ground, chassis, false, ChCoordsys<>(chassis->GetPos(), QUNIT),
-                         ChCoordsys<>(chassis->GetPos() + ChVector<>(1, 0, 0), QUNIT));
-    actuator->SetName("actuator");
-    actuator->SetDistanceOffset(1);
-    actuator->SetActuatorFunction(actuator_fun);
-    sysMBS.AddLink(actuator);
+    // actuator->Initialize(ground, chassis, false, ChCoordsys<>(chassis->GetPos(), QUNIT),
+    //                      ChCoordsys<>(chassis->GetPos() + ChVector<>(1, 0, 0), QUNIT));
+    // actuator->SetName("actuator");
+    // actuator->SetDistanceOffset(1);
+    // actuator->SetActuatorFunction(actuator_fun);
+    // sysMBS.AddLink(actuator);
 
     // Connect the axle to the chassis through a vertical translational joint.
     auto prismatic2 = chrono_types::make_shared<ChLinkLockPrismatic>();
@@ -261,6 +262,9 @@ void CreateSolidPhase(ChSystemSMC& sysMBS, ChSystemFsi& sysFSI) {
 // =============================================================================
 
 int main(int argc, char* argv[]) {
+    
+    SetChronoDataPath(CHRONO_DATA_DIR);
+    
     // Create the MBS and FSI systems
     ChSystemSMC sysMBS;
     ChSystemFsi sysFSI(&sysMBS);
@@ -268,15 +272,14 @@ int main(int argc, char* argv[]) {
     sysFSI.SetVerbose(verbose_fsi);
 
     // Use the default input file or you may enter your input parameters as a command line argument
-    std::string inputJson = "demo_FSI_SingleWheelTest_VV_mode.json";
-    if (argc == 4) {
+    std::string inputJson = "demo_FSI_SingleWheelTest_RealSlope_mode.json";
+    if (argc == 3) {
         total_mass = std::stod(argv[1]);
-        wheel_slip = std::stod(argv[2]);
-        wheel_AngVel = wheel_vel / (wheel_radius * (1.0 - wheel_slip));
-        out_dir = out_dir + std::to_string(std::stoi(argv[3])) + "/";;
-    } else if (argc != 4) {
-        std::cout << "usage: ./demo_FSI_SingleWheelTest_VV_mode <total_mass> <wheel_slip>" << std::endl;
-        std::cout << "or to use default input parameters ./demo_FSI_SingleWheelTest_VV_mode " << std::endl;
+        slope_angle = std::stod(argv[2]) / 180.0 * CH_C_PI;
+        out_dir = out_dir + std::to_string(std::stoi(argv[2])) + "/";
+    } else if (argc != 3) {
+        std::cout << "usage: ./demo_FSI_SingleWheelTest_RealSlope_mode <total_mass> <slope_angle>" << std::endl;
+        std::cout << "or to use default input parameters ./demo_FSI_SingleWheelTest_RealSlope_mode " << std::endl;
         return 1;
     }
 
@@ -300,9 +303,13 @@ int main(int argc, char* argv[]) {
 
     sysFSI.ReadParametersFromFile(inputJson);
 
+    double gravity_G = sysFSI.Get_G_acc().z();
+    ChVector<> gravity = ChVector<>(gravity_G * sin(slope_angle), 0, gravity_G * cos(slope_angle));
+    sysMBS.Set_G_acc(gravity);
+    sysFSI.Set_G_acc(gravity);
+
     iniSpacing = sysFSI.GetInitialSpacing();
     kernelLength = sysFSI.GetKernelLength();
-    sysMBS.Set_G_acc(sysFSI.Get_G_acc());
 
     // // Set the initial particle spacing
     // sysFSI.SetInitialSpacing(iniSpacing);
