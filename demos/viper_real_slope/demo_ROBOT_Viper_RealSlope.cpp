@@ -135,7 +135,7 @@ int main(int argc, char* argv[]) {
     ChSystemFsi sysFSI(&sysMBS);
 
     // Read JSON file with simulation parameters
-    std::string inputJson = "demo_ROBOT_Viper_RealSlope.json";
+    std::string inputJson = "../demo_ROBOT_Viper_RealSlope.json";
     if (argc == 3) {
         total_mass = std::stod(argv[1]);
         slope_angle = std::stod(argv[2]) / 180.0 * CH_C_PI;

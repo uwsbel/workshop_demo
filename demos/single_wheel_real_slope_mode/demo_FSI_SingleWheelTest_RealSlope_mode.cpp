@@ -272,7 +272,7 @@ int main(int argc, char* argv[]) {
     sysFSI.SetVerbose(verbose_fsi);
 
     // Use the default input file or you may enter your input parameters as a command line argument
-    std::string inputJson = "demo_FSI_SingleWheelTest_RealSlope_mode.json";
+    std::string inputJson = "../demo_FSI_SingleWheelTest_RealSlope_mode.json";
     if (argc == 3) {
         total_mass = std::stod(argv[1]);
         slope_angle = std::stod(argv[2]) / 180.0 * CH_C_PI;
