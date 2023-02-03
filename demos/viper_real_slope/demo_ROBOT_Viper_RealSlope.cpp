@@ -80,7 +80,7 @@ double wheel_wide = 0.2;
 double grouser_height = 0.025;
 double grouser_wide = 0.005;
 int grouser_num = 24;
-double wheel_AngVel = 0.3265;
+double wheel_AngVel = 0.8;
 
 // Pointer to store the VIPER instance
 std::shared_ptr<Viper> rover;
