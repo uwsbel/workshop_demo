@@ -56,7 +56,7 @@ RUN cd demos/viper_real_slope/build && cmake ../ . -G Ninja \
 -DChrono_DIR=/root/sbel/chrono/build/cmake \
 && ninja
 
-
+RUN mkdir outputs
 
 
 ENTRYPOINT ["/bin/bash"]

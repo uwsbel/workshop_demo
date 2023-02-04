@@ -82,7 +82,7 @@ bool output = true;
 int out_fps = 20;
 
 // Output directories and settings
-std::string out_dir = "FSI_Single_Wheel_Test_RealSlope_mode_slope";
+std::string out_dir = "/root/sbel/outputs/FSI_Single_Wheel_Test_RealSlope_mode_slope";
 
 // Enable/disable run-time visualization (if Chrono::OpenGL is available)
 bool render = true;
@@ -284,19 +284,19 @@ int main(int argc, char* argv[]) {
     }
 
     // Create oputput directories
-    if (!filesystem::create_directory(filesystem::path(out_dir))) {
+    if (!filesystem::create_subdirectory(filesystem::path(out_dir))) {
         std::cerr << "Error creating directory " << out_dir << std::endl;
         return 1;
     }
-    if (!filesystem::create_directory(filesystem::path(out_dir + "/particles"))) {
+    if (!filesystem::create_subdirectory(filesystem::path(out_dir + "/particles"))) {
         std::cerr << "Error creating directory " << out_dir + "/particles" << std::endl;
         return 1;
     }
-    if (!filesystem::create_directory(filesystem::path(out_dir + "/fsi"))) {
+    if (!filesystem::create_subdirectory(filesystem::path(out_dir + "/fsi"))) {
         std::cerr << "Error creating directory " << out_dir + "/fsi" << std::endl;
         return 1;
     }
-    if (!filesystem::create_directory(filesystem::path(out_dir + "/vtk"))) {
+    if (!filesystem::create_subdirectory(filesystem::path(out_dir + "/vtk"))) {
         std::cerr << "Error creating directory " << out_dir + "/vtk" << std::endl;
         return 1;
     }

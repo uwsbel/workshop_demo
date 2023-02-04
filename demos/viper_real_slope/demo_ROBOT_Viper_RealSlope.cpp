@@ -45,7 +45,7 @@ double slope_angle; // Terrain slope
 double total_mass; // 1.0 means using default mass 440kg
 
 // output directories and settings
-std::string out_dir = "FSI_Viper_RealSlope_SlopeAngle_";
+std::string out_dir = "/root/sbel/outputs/FSI_Viper_RealSlope_SlopeAngle_";
 
 // Dimension of the space domain
 double bxDim = 6.0;
@@ -146,19 +146,19 @@ int main(int argc, char* argv[]) {
     }
 
     // Create oputput directories
-    if (!filesystem::create_directory(filesystem::path(out_dir))) {
+    if (!filesystem::create_subdirectory(filesystem::path(out_dir))) {
         std::cerr << "Error creating directory " << out_dir << std::endl;
         return 1;
     }
-    if (!filesystem::create_directory(filesystem::path(out_dir + "/particles"))) {
+    if (!filesystem::create_subdirectory(filesystem::path(out_dir + "/particles"))) {
         std::cerr << "Error creating directory " << out_dir + "/particles" << std::endl;
         return 1;
     }
-    if (!filesystem::create_directory(filesystem::path(out_dir + "/fsi"))) {
+    if (!filesystem::create_subdirectory(filesystem::path(out_dir + "/fsi"))) {
         std::cerr << "Error creating directory " << out_dir + "/fsi" << std::endl;
         return 1;
     }
-    if (!filesystem::create_directory(filesystem::path(out_dir + "/rover"))) {
+    if (!filesystem::create_subdirectory(filesystem::path(out_dir + "/rover"))) {
         std::cerr << "Error creating directory " << out_dir + "/rover" << std::endl;
         return 1;
     }
