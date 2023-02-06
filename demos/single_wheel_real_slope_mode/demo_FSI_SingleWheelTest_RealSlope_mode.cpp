@@ -79,14 +79,14 @@ auto motor = chrono_types::make_shared<ChLinkMotorRotationAngle>();
 
 // Save data as csv files to see the results off-line using Paraview
 bool output = true;
-int out_fps = 20;
+int out_fps = 1;
 
 // Output directories and settings
 std::string out_dir = "/root/sbel/outputs/FSI_Single_Wheel_Test_RealSlope_mode_slope";
 
 // Enable/disable run-time visualization (if Chrono::OpenGL is available)
 bool render = true;
-float render_fps = 20;
+float render_fps = 1;
 
 // Verbose terminal output
 bool verbose_fsi = true;
