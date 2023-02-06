@@ -36,7 +36,7 @@ RUN cd chrono/build && cmake ../ -G Ninja \
  -DENABLE_MODULE_VEHICLE=ON \
  -DENABLE_MODULE_FSI=ON \
  -DEigen3_DIR=/usr/lib/cmake/eigen3 \
- && ninja && ninja install
+ && ninja -j 8 && ninja install
 
 RUN mkdir demos/single_wheel_vv_mode/build
 RUN cd demos/single_wheel_vv_mode/build && cmake ../ . -G Ninja \
