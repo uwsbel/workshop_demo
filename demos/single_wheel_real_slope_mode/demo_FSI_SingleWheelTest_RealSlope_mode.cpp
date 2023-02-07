@@ -63,7 +63,7 @@ double wheel_slip = 0.0;
 double wheel_vel = 0.2;
 double wheel_AngVel = 0.8; //wheel_vel / (wheel_radius * (1.0 - wheel_slip));;
 double total_mass = 17.5;
-std::string wheel_obj = "vehicle/hmmwv/hmmwv_tire_coarse_closed.obj";
+std::string wheel_obj = "robot/viper/obj/viper_wheel.obj";
 
 // Initial Position of wheel
 ChVector<> wheel_IniPos(-bxDim / 2 + wheel_radius * 2.0, 0.0, wheel_radius + bzDim + 0.01);
