@@ -23,10 +23,12 @@ You should be get into container. To run the demo, go to directory ``` /root/sbe
     - 0.3 is slip ratio that would like to enforce
     - 3 is just an ID for this slip
 
-- ./demo_FSI_SingleWheelTest_RealSlope_mode 17.5 15
+- ./demo_FSI_SingleWheelTest_RealSlope_mode 17.5 15 0.8
     - 17.5 is the mass of the wheel
     - 15 is the slope angle of the terrain
+    - 0.8 is the wheel angular velocity
 
-- ./demo_ROBOT_Viper_RealSlope 73.0 15
+- ./demo_ROBOT_Viper_RealSlope 73.0 15 0.8
     - 73.0 is the mass of the rover
     - 15 is the slope angle of the terrain
+    - 0.8 is the wheel angular velocity

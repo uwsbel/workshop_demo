@@ -273,12 +273,13 @@ int main(int argc, char* argv[]) {
 
     // Use the default input file or you may enter your input parameters as a command line argument
     std::string inputJson = "../demo_FSI_SingleWheelTest_RealSlope_mode.json";
-    if (argc == 3) {
+    if (argc == 4) {
         total_mass = std::stod(argv[1]);
         slope_angle = std::stod(argv[2]) / 180.0 * CH_C_PI;
+        wheel_AngVel = = std::stod(argv[3]);
         out_dir = out_dir + std::to_string(std::stoi(argv[2])) + "/";
-    } else if (argc != 3) {
-        std::cout << "usage: ./demo_FSI_SingleWheelTest_RealSlope_mode <total_mass> <slope_angle>" << std::endl;
+    } else if (argc != 4) {
+        std::cout << "usage: ./demo_FSI_SingleWheelTest_RealSlope_mode <total_mass> <slope_angle> <wheel_angVel>" << std::endl;
         std::cout << "or to use default input parameters ./demo_FSI_SingleWheelTest_RealSlope_mode " << std::endl;
         return 1;
     }

@@ -136,12 +136,13 @@ int main(int argc, char* argv[]) {
 
     // Read JSON file with simulation parameters
     std::string inputJson = "../demo_ROBOT_Viper_RealSlope.json";
-    if (argc == 3) {
+    if (argc == 4) {
         total_mass = std::stod(argv[1]);
         slope_angle = std::stod(argv[2]) / 180.0 * CH_C_PI;
+        wheel_AngVel = std::stod(argv[3]);
         out_dir = out_dir + std::to_string(std::stoi(argv[2])) + "/";
-    } else if (argc != 3) {
-        std::cout << "usage: ./demo_ROBOT_Viper_RealSlope <total_mass> <slope_angle>" << std::endl;
+    } else if (argc != 4) {
+        std::cout << "usage: ./demo_ROBOT_Viper_RealSlope <total_mass> <slope_angle> <wheel_angVel>" << std::endl;
         return 1;
     }
 
