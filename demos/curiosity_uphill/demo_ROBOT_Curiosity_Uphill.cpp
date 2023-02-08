@@ -47,7 +47,7 @@ double total_mass;
 double part_density = 2879;
 
 // output directories and settings
-std::string out_dir = "FSI_Curiosity_Uphill_";
+std::string out_dir = "/root/sbel/outputs/FSI_Curiosity_Uphill_";
 
 // Dimension of the space domain
 double bxDim = 6.0;
@@ -80,9 +80,6 @@ double grouser_height = 0.025;
 double grouser_wide = 0.005;
 int grouser_num = 24;
 double wheel_AngVel = 0.5 * CH_C_PI;
-
-// Use below mesh file if the wheel type is real Curiosity wheel
-std::string wheel_obj = "nasa_viper_wheel.obj";
 
 std::vector<ChVector<>> BCE_Wall;
 
@@ -155,7 +152,7 @@ int main(int argc, char* argv[]) {
     ChSystemFsi sysFSI(&sysMBS);
 
     // Read JSON file with simulation parameters
-    std::string inputJson = "demo_ROBOT_Curiosity_Uphill.json";
+    std::string inputJson = "../demo_ROBOT_Curiosity_Uphill.json";
     if (argc == 4) {
         total_mass = std::stod(argv[1]);
         hill_height = std::stod(argv[2]);
@@ -167,19 +164,19 @@ int main(int argc, char* argv[]) {
     }
 
     // Create oputput directories
-    if (!filesystem::create_directory(filesystem::path(out_dir))) {
+    if (!filesystem::create_subdirectory(filesystem::path(out_dir))) {
         std::cerr << "Error creating directory " << out_dir << std::endl;
         return 1;
     }
-    if (!filesystem::create_directory(filesystem::path(out_dir + "/particles"))) {
+    if (!filesystem::create_subdirectory(filesystem::path(out_dir + "/particles"))) {
         std::cerr << "Error creating directory " << out_dir + "/particles" << std::endl;
         return 1;
     }
-    if (!filesystem::create_directory(filesystem::path(out_dir + "/fsi"))) {
+    if (!filesystem::create_subdirectory(filesystem::path(out_dir + "/fsi"))) {
         std::cerr << "Error creating directory " << out_dir + "/fsi" << std::endl;
         return 1;
     }
-    if (!filesystem::create_directory(filesystem::path(out_dir + "/rover"))) {
+    if (!filesystem::create_subdirectory(filesystem::path(out_dir + "/rover"))) {
         std::cerr << "Error creating directory " << out_dir + "/rover" << std::endl;
         return 1;
     }
@@ -188,7 +185,7 @@ int main(int argc, char* argv[]) {
 
     double gravity_G = sysFSI.Get_G_acc().z();
     ChVector<> gravity = ChVector<>(gravity_G * sin(slope_angle), 0, gravity_G * cos(slope_angle));
-    sysMBS.Set_G_acc(gravity * (total_mass / 930.0));
+    sysMBS.Set_G_acc(gravity * (total_mass / 900.0));
     sysFSI.Set_G_acc(gravity);
 
     iniSpacing = sysFSI.GetInitialSpacing();
@@ -482,7 +479,7 @@ void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
     {
         // load mesh from obj file
         auto mmesh = chrono_types::make_shared<ChTriangleMeshConnected>();
-        std::string obj_path = "Part_Mesh/body.obj";
+        std::string obj_path = "../obj_for_render/body.obj";
         double scale_ratio = 1.0;
         mmesh->LoadWavefrontMesh(obj_path, false, true);
         // mmesh->Transform(ChVector<>(0, 0, 0), ChMatrix33<>(body_rot));     // rotate the mesh if needed
@@ -545,7 +542,7 @@ void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
     for (int i = 0; i < 6; i++) {
         // load mesh from obj file
         auto mmesh = chrono_types::make_shared<ChTriangleMeshConnected>();
-        std::string obj_path = "Part_Mesh/nasa_viper_wheel.obj";
+        std::string obj_path = "../obj_for_render/nasa_viper_wheel.obj";
         double scale_ratio = 1.0;
         mmesh->LoadWavefrontMesh(obj_path, false, true);
         // mmesh->Transform(ChVector<>(0, 0, 0), ChMatrix33<>(body_rot));       // rotate the mesh if needed
@@ -621,10 +618,10 @@ void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
         // load mesh from obj file
         auto mmesh = chrono_types::make_shared<ChTriangleMeshConnected>();
         std::string obj_path;
-        if(i == 0){obj_path = "Part_Mesh/F_L.obj";}
-        if(i == 1){obj_path = "Part_Mesh/F_R.obj";}
-        if(i == 2){obj_path = "Part_Mesh/B_L.obj";}
-        if(i == 3){obj_path = "Part_Mesh/B_R.obj";}
+        if(i == 0){obj_path = "../obj_for_render/F_L.obj";}
+        if(i == 1){obj_path = "../obj_for_render/F_R.obj";}
+        if(i == 2){obj_path = "../obj_for_render/B_L.obj";}
+        if(i == 3){obj_path = "../obj_for_render/B_R.obj";}
         double scale_ratio = 1.0;
         mmesh->LoadWavefrontMesh(obj_path, false, true);
         // mmesh->Transform(ChVector<>(0, 0, 0), ChMatrix33<>(body_rot));       // rotate the mesh if needed
@@ -689,10 +686,10 @@ void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
         // load mesh from obj file
         auto mmesh = chrono_types::make_shared<ChTriangleMeshConnected>();
         std::string obj_path;
-        if(i == 0){obj_path = "Part_Mesh/ster_front.obj";}
-        if(i == 1){obj_path = "Part_Mesh/ster_front.obj";}
-        if(i == 2){obj_path = "Part_Mesh/ster_back.obj";}
-        if(i == 3){obj_path = "Part_Mesh/ster_back.obj";}
+        if(i == 0){obj_path = "../obj_for_render/ster_front.obj";}
+        if(i == 1){obj_path = "../obj_for_render/ster_front.obj";}
+        if(i == 2){obj_path = "../obj_for_render/ster_back.obj";}
+        if(i == 3){obj_path = "../obj_for_render/ster_back.obj";}
         double scale_ratio = 1.0;
         mmesh->LoadWavefrontMesh(obj_path, false, true);
         // mmesh->Transform(ChVector<>(0, 0, 0), ChMatrix33<>(body_rot));       // rotate the mesh if needed
@@ -756,9 +753,9 @@ void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
         // load mesh from obj file
         auto mmesh = chrono_types::make_shared<ChTriangleMeshConnected>();
         std::string obj_path;
-        if(i == 0){obj_path = "Part_Mesh/bar_l.obj";}
-        if(i == 1){obj_path = "Part_Mesh/bar_r.obj";}
-        if(i == 2){obj_path = "Part_Mesh/balancer.obj";}
+        if(i == 0){obj_path = "../obj_for_render/bar_l.obj";}
+        if(i == 1){obj_path = "../obj_for_render/bar_r.obj";}
+        if(i == 2){obj_path = "../obj_for_render/balancer.obj";}
         double scale_ratio = 1.0;
         mmesh->LoadWavefrontMesh(obj_path, false, true);
         // mmesh->Transform(ChVector<>(0, 0, 0), ChMatrix33<>(body_rot));       // rotate the mesh if needed
