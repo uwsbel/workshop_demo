@@ -2,6 +2,7 @@
 The Chrono demos are containerized with Docker. Here are some instructions how to set up container on your machine so that you can successfully run the demo.
 
 ## Installation
+### Method 1 ---- Build from scratch 
 Open a terminal in your machine then run 
 
 ```git clone https://github.com/uwsbel/workshop_demo.git && cd workshop_demo```
@@ -12,10 +13,31 @@ Once getting into folder, running the following to build docker image from Docke
 
 Notice that you can put a tag name for the image you build by using flag -t. After building it, run a container using the command:
 
-```docker run -it --gpus all <img_name> ```
+```docker run -it --gpus all -v <dir_to_store_data>:/root/sbel/outputs uwsbel/demo ```
 
-You should be get into container. To run the demo, go to directory ``` /root/sbel/chrono/build/bin/```, the executable demos are in this folder.
+Note: ```<dir_to_store_data>``` is the directory of where you want to store the demo’s output data in your host machine. 
+Windows user will run something like:```docker run -it --gpus all -v C:\Users\SBEL\demo_output\:/root/sbel/outputs uwsbel/demo```
+Linux user will run something like: ```docker run -it --gpus all -v /home/harry/workshop_demo/outputs/:/root/sbel/outputs uwsbel/demo```  
+Then, you should be get into container.
 
+### Method 2 ---- Pulling Our Docker Image
+
+Pulling the Docker image by running:
+
+```docker pull uwsbel/demo```
+
+Check if the docker image is in your local machine by running:
+
+```docker images```
+
+you should see an image called “uwsbel/demo” with a tag called “latest”. Then running a container with the image you pulled by running:
+
+```docker run -it --gpus all -v <dir_to_store_data>:/root/sbel/outputs uwsbel/demo```
+
+Note: ```<dir_to_store_data>``` is the directory of where you want to store the demo’s output data in your host machine. 
+Windows user will run something like:```docker run -it --gpus all -v C:\Users\SBEL\demo_output\:/root/sbel/outputs uwsbel/demo```
+Linux user will run something like: ```docker run -it --gpus all -v /home/harry/workshop_demo/outputs/:/root/sbel/outputs uwsbel/demo```  
+Then, you should be get into container.
 
 ## Run the demo
 Single wheel test under VV mode
