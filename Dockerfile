@@ -57,6 +57,12 @@ RUN cd demos/viper_real_slope/build && cmake ../ . -G Ninja \
 -DChrono_DIR=/root/sbel/chrono/build/cmake \
 && ninja
 
+RUN mkdir demos/curiosity_uphill/build
+RUN cd demos/curiosity_uphill/build && cmake ../ . -G Ninja \
+-DCMAKE_BUILD_TYPE=Release \
+-DChrono_DIR=/root/sbel/chrono/build/cmake \
+&& ninja
+
 RUN mkdir outputs
 
 

@@ -61,7 +61,7 @@ double L_top = 1.0;
 ChVector<> init_loc(bxDim / 2.0 + 1.3, 0, 0.05);
 
 // Simulation time and stepsize
-double total_time = 50.0;
+double total_time = 25.0;
 double dT = 2.5e-4;
 
 // Save data as csv files to see the results off-line using Paraview
