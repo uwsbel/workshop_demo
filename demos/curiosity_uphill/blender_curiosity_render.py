@@ -119,28 +119,28 @@ for i in range(start_frame, end_frame, 1):
                 obj_name_spe = "body"
             if n==1:
                 # continue
-                obj_name = "nasa_viper_wheel"
-                obj_name_spe = "nasa_viper_wheel"
+                obj_name = "wheel"
+                obj_name_spe = "wheel"
             if n==2:
                 # continue
-                obj_name = "nasa_viper_wheel"
-                obj_name_spe = "nasa_viper_wheel." + str(1).zfill(3)
+                obj_name = "wheel"
+                obj_name_spe = "wheel." + str(1).zfill(3)
             if n==3:
                 # continue
-                obj_name = "nasa_viper_wheel"
-                obj_name_spe = "nasa_viper_wheel." + str(2).zfill(3)
+                obj_name = "wheel"
+                obj_name_spe = "wheel." + str(2).zfill(3)
             if n==4:
                 # continue
-                obj_name = "nasa_viper_wheel"
-                obj_name_spe = "nasa_viper_wheel." + str(3).zfill(3)
+                obj_name = "wheel"
+                obj_name_spe = "wheel." + str(3).zfill(3)
             if n==5:
                 # continue
-                obj_name = "nasa_viper_wheel"
-                obj_name_spe = "nasa_viper_wheel." + str(4).zfill(3)
+                obj_name = "wheel"
+                obj_name_spe = "wheel." + str(4).zfill(3)
             if n==6:
                 # continue
-                obj_name = "nasa_viper_wheel"
-                obj_name_spe = "nasa_viper_wheel." + str(5).zfill(3)
+                obj_name = "wheel"
+                obj_name_spe = "wheel." + str(5).zfill(3)
             if n==7:
                 obj_name = "F_L"
                 obj_name_spe = "F_L"

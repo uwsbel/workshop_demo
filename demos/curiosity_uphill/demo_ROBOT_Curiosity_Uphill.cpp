@@ -542,7 +542,7 @@ void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
     for (int i = 0; i < 6; i++) {
         // load mesh from obj file
         auto mmesh = chrono_types::make_shared<ChTriangleMeshConnected>();
-        std::string obj_path = "../obj_for_render/nasa_viper_wheel.obj";
+        std::string obj_path = "../obj_for_render/wheel.obj";
         double scale_ratio = 1.0;
         mmesh->LoadWavefrontMesh(obj_path, false, true);
         // mmesh->Transform(ChVector<>(0, 0, 0), ChMatrix33<>(body_rot));       // rotate the mesh if needed
