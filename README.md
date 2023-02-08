@@ -45,7 +45,7 @@ Full VIPER rover under real slope
 ## Render the VIPER rover results using Blender
 - Download the Blender package here: https://download.blender.org/release/Blender2.91/blender-2.91.0-linux64.tar.xz
 - Go to one of the full VIPER rover result folder, e.g /FSI_Viper_RealSlope_SlopeAngle_15
-- Move the script "blender_viper_render.py" to the same folder
+- Copy the script "blender_viper_render.py" and the obj file folder "obj_for_render" to the above result folder
 - Render an image using below command (7 is the frame number of the output image)
 
-```blender-2.91.0-linux64/blender --background --python ./blender_viper_render.py 7```
+```/home/weihu/Downloads/blender-2.91.0-linux64/blender --background --python ./blender_viper_render.py 7```

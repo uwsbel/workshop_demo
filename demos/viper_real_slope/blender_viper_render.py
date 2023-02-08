@@ -19,7 +19,7 @@ res_y = 1080
 
 #============ specify the directory of csv, obj, image, and such
 data_sim = "./"
-file_obj = "../../obj_for_render/"
+file_obj = "./obj_for_render/"
 image_dir = "./"
 
 #============ find the position that the camera points at
