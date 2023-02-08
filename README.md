@@ -32,3 +32,10 @@ You should be get into container. To run the demo, go to directory ``` /root/sbe
     - 73.0 is the mass of the rover
     - 15 is the slope angle of the terrain
     - 0.8 is the wheel angular velocity
+
+## Render the VIPER rover results using Blender
+- Download the Blender package here: https://download.blender.org/release/Blender2.91/blender-2.91.0-linux64.tar.xz
+- Go to one of the full VIPER rover result folder, e.g /FSI_Viper_RealSlope_SlopeAngle_15
+- Move the script "blender_viper_render.py" to the same folder
+- Render an image using below command (7 is the frame number of the output image)
+    - blender-2.91.0-linux64/blender --background --python ./blender_viper_render.py 7
