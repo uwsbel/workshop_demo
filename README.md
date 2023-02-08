@@ -18,17 +18,17 @@ You should be get into container. To run the demo, go to directory ``` /root/sbe
 
 
 ## Run the demo
-- ./demo_FSI_SingleWheelTest_VV_mode 17.5 0.3 3
+```./demo_FSI_SingleWheelTest_VV_mode 17.5 0.3 3```
     - 17.5 is the mass of the wheel
     - 0.3 is slip ratio that would like to enforce
     - 3 is just an ID for this slip
 
-- ./demo_FSI_SingleWheelTest_RealSlope_mode 17.5 15 0.8
+```./demo_FSI_SingleWheelTest_RealSlope_mode 17.5 15 0.8```
     - 17.5 is the mass of the wheel
     - 15 is the slope angle of the terrain
     - 0.8 is the wheel angular velocity
 
-- ./demo_ROBOT_Viper_RealSlope 73.0 15 0.8
+```./demo_ROBOT_Viper_RealSlope 73.0 15 0.8```
     - 73.0 is the mass of the rover
     - 15 is the slope angle of the terrain
     - 0.8 is the wheel angular velocity
@@ -38,4 +38,4 @@ You should be get into container. To run the demo, go to directory ``` /root/sbe
 - Go to one of the full VIPER rover result folder, e.g /FSI_Viper_RealSlope_SlopeAngle_15
 - Move the script "blender_viper_render.py" to the same folder
 - Render an image using below command (7 is the frame number of the output image)
-    - blender-2.91.0-linux64/blender --background --python ./blender_viper_render.py 7
+```blender-2.91.0-linux64/blender --background --python ./blender_viper_render.py 7```
