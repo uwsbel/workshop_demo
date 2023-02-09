@@ -121,28 +121,28 @@ for i in range(start_frame, end_frame, 1):
                     obj_name_spe = "viper_chassis." + str(n_r).zfill(3)
             if n==1:
                 # continue
-                obj_name = "wheel"
-                obj_name_spe = "wheel"
+                obj_name = "viper_wheel"
+                obj_name_spe = "viper_wheel"
                 if n_r > 0:
-                    obj_name_spe = "wheel." + str(4 * n_r).zfill(3)
+                    obj_name_spe = "viper_wheel." + str(4 * n_r).zfill(3)
             if n==5:
                 # continue
-                obj_name = "wheel"
-                obj_name_spe = "wheel." + str(1).zfill(3)
+                obj_name = "viper_wheel"
+                obj_name_spe = "viper_wheel." + str(1).zfill(3)
                 if n_r > 0:
-                    obj_name_spe = "wheel." + str(4 * n_r + 1).zfill(3)
+                    obj_name_spe = "viper_wheel." + str(4 * n_r + 1).zfill(3)
             if n==9:
                 # continue
-                obj_name = "wheel"
-                obj_name_spe = "wheel." + str(2).zfill(3)
+                obj_name = "viper_wheel"
+                obj_name_spe = "viper_wheel." + str(2).zfill(3)
                 if n_r > 0:
-                    obj_name_spe = "wheel." + str(4 * n_r + 2).zfill(3)
+                    obj_name_spe = "viper_wheel." + str(4 * n_r + 2).zfill(3)
             if n==13:
                 # continue
-                obj_name = "wheel"
-                obj_name_spe = "wheel." + str(3).zfill(3)
+                obj_name = "viper_wheel"
+                obj_name_spe = "viper_wheel." + str(3).zfill(3)
                 if n_r > 0:
-                    obj_name_spe = "wheel." + str(4 * n_r + 3).zfill(3)
+                    obj_name_spe = "viper_wheel." + str(4 * n_r + 3).zfill(3)
             if n==4:
                 obj_name = "viper_L_steer"
                 obj_name_spe = "viper_L_steer"
