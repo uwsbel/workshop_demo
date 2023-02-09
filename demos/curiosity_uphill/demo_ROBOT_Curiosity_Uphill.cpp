@@ -91,19 +91,13 @@ double motor_ang_v_max;
 double motor_acc_rate;
 double slip_base;
 
+// Motor on each wheel
 std::shared_ptr<ChLinkMotorRotationSpeed> link_motor_speed_lf; 
 std::shared_ptr<ChLinkMotorRotationSpeed> link_motor_speed_rf; 
 std::shared_ptr<ChLinkMotorRotationSpeed> link_motor_speed_lm; 
 std::shared_ptr<ChLinkMotorRotationSpeed> link_motor_speed_rm; 
 std::shared_ptr<ChLinkMotorRotationSpeed> link_motor_speed_lb; 
 std::shared_ptr<ChLinkMotorRotationSpeed> link_motor_speed_rb; 
-
-std::shared_ptr<ChLinkMotorRotationTorque> link_motor_torque_lf; 
-std::shared_ptr<ChLinkMotorRotationTorque> link_motor_torque_rf; 
-std::shared_ptr<ChLinkMotorRotationTorque> link_motor_torque_lm; 
-std::shared_ptr<ChLinkMotorRotationTorque> link_motor_torque_rm; 
-std::shared_ptr<ChLinkMotorRotationTorque> link_motor_torque_lb; 
-std::shared_ptr<ChLinkMotorRotationTorque> link_motor_torque_rb; 
 
 std::shared_ptr<ChMaterialSurface> CustomWheelMaterial(ChContactMethod contact_method) {
     float mu = 0.4f;   // coefficient of friction
@@ -312,126 +306,6 @@ int main(int argc, char* argv[]) {
         printf("Rover Vel =%f,%f,%f\n", vel.x(), vel.y(), vel.z());
         printf("Rover Rot =%f,%f,%f,%f\n", rot.e0(), rot.e1(), rot.e2(), rot.e3());
         Rover->SetPos_dt(ChVector<>(vel.x(), 0.0, vel.z()));
-        
-        // adaptively changing the velocity of the wheel
-        // double radius_wheel = 0.27;
-        // double vel_rover = sqrt(vel.x()*vel.x() + vel.y()*vel.y() + vel.z()*vel.z());
-        // double vel_rover_max = 0.4;
-        // double vel_ratio = vel_rover_max/vel_rover;
-        // double ang_incline = CH_C_PI / 6;
-
-        // find the maximum linear velocity of the wheels
-        double v_lf,v_rf,v_lm,v_rm,v_lr,v_rr;
-        double v_max = 0.0;
-        for (int i = 0; i < 6; i++){
-            auto wheel = sysMBS.Get_bodylist()[2+i];
-            ChVector<> wheel_vel = wheel->GetPos_dt();
-            double vel_w = sqrt(wheel_vel.x()*wheel_vel.x() + wheel_vel.z()*wheel_vel.z());//+ wheel_vel.y()*wheel_vel.y()
-            if(i==0){v_lf = vel_w;}
-            if(i==1){v_rf = vel_w;}
-            if(i==2){v_lm = vel_w;}
-            if(i==3){v_rm = vel_w;}
-            if(i==4){v_lr = vel_w;}
-            if(i==5){v_rr = vel_w;}
-            if(vel_w > v_max)
-                v_max = vel_w;
-        }
-        // set angular velocity of each wheel
-        double ang_lf,ang_rf,ang_lm,ang_rm,ang_lr,ang_rr;
-        for (int i = 0; i < 6; i++){
-            if(i==0){ang_lf = v_lf / v_max * (motor_F * CH_C_PI);}
-            if(i==1){ang_rf = v_rf / v_max * (motor_F * CH_C_PI);}
-            if(i==2){ang_lm = v_lm / v_max * (motor_F * CH_C_PI);}
-            if(i==3){ang_rm = v_rm / v_max * (motor_F * CH_C_PI);}
-            if(i==4){ang_lr = v_lr / v_max * (motor_F * CH_C_PI);}
-            if(i==5){ang_rr = v_rr / v_max * (motor_F * CH_C_PI);}
-        }
-
-        // myFile.open("results.txt", std::ios::app);
-        // myFile << time << "\t";        
-        for (int i = 0; i < 6; i++){
-            auto wheel = sysMBS.Get_bodylist()[2+i];
-            ChFrame<> ref_frame_wheel = wheel->GetFrame_REF_to_abs();
-            ChVector<> wheel_pos = ref_frame_wheel.GetPos();
-            ChQuaternion<> wheel_rot = ref_frame_wheel.GetRot();
-            ChVector<> wheel_vel = wheel->GetPos_dt();
-            wheel->SetPos_dt(ChVector<>(wheel_vel.x(), 0.0, wheel_vel.z()));
-            ChVector<> wheel_ang_v = wheel->GetWvel_par();
-            // ChVector<> wheel_F = wheel->GetContactForce();
-            // ChVector<> wheel_T;
-            // if(i==0){wheel_T = link_motor_speed_lf->Get_react_torque();}
-            // if(i==1){wheel_T = link_motor_speed_rf->Get_react_torque();}
-            // if(i==2){wheel_T = link_motor_speed_lm->Get_react_torque();}
-            // if(i==3){wheel_T = link_motor_speed_rm->Get_react_torque();}
-            // if(i==4){wheel_T = link_motor_speed_lb->Get_react_torque();}
-            // if(i==5){wheel_T = link_motor_speed_rb->Get_react_torque();}   
-
-            auto spindle = sysMBS.Get_bodylist()[0];
-            if(i==0){spindle = sysMBS.Get_bodylist()[i+12];}
-            if(i==1){spindle = sysMBS.Get_bodylist()[i+12];}
-            if(i==2){spindle = sysMBS.Get_bodylist()[i+8];}
-            if(i==3){spindle = sysMBS.Get_bodylist()[i+8];}
-            if(i==4){spindle = sysMBS.Get_bodylist()[i+10];}
-            if(i==5){spindle = sysMBS.Get_bodylist()[i+10];}
-            ChVector<> spindle_ang_v = spindle->GetWvel_par();
-
-            // double vel_w = sqrt(wheel_vel.x()*wheel_vel.x() + wheel_vel.z()*wheel_vel.z());//+ wheel_vel.y()*wheel_vel.y()
-            // double ang_w = sqrt(wheel_ang_v.y()*wheel_ang_v.y());
-            // double slip = 1.0 - vel_w / (ang_w * wheel_radius);
-
-            // double vel_w_new = vel_w * (1.0 / radius_wheel) ;//* vel_ratio
-            // double motor_ang_v = -vel_w_new - spindle_ang_v.y();
-
-            double motor_ang_v;// = wheel_ang_v.y()- spindle_ang_v.y();
-            // if(slip > slip_base + 0.00){
-            //     motor_ang_v = (1.0 - motor_acc_rate) * (wheel_ang_v.y() - spindle_ang_v.y());
-            // }
-            // if(slip < slip_base - 0.00){
-            //     motor_ang_v = (1.0 + motor_acc_rate) * (wheel_ang_v.y() - spindle_ang_v.y());
-            // }
-
-            // if( (wheel_pos.x() > 0.5*fxDim) || (wheel_pos.x() < 0.0) ){
-            //     motor_ang_v = motor_F * CH_C_PI;
-            // }
-            if(i==0){motor_ang_v = - ang_lf - spindle_ang_v.y();}
-            if(i==1){motor_ang_v = - ang_rf - spindle_ang_v.y();}
-            if(i==2){motor_ang_v = - ang_lm - spindle_ang_v.y();}
-            if(i==3){motor_ang_v = - ang_rm - spindle_ang_v.y();}
-            if(i==4){motor_ang_v = - ang_lr - spindle_ang_v.y();}
-            if(i==5){motor_ang_v = - ang_rr - spindle_ang_v.y();}
-
-            double ang_motor =  std::abs(motor_ang_v);
-            
-            // if(ang_motor < motor_ang_v_min * motor_F * CH_C_PI){
-            //     ang_motor = motor_ang_v_min * motor_F * CH_C_PI;
-            // }
-            // if(ang_motor >  motor_ang_v_max * motor_F * CH_C_PI){
-            //     ang_motor =  motor_ang_v_max * motor_F * CH_C_PI;
-            // }
-
-            // printf("wheel %d position = %f,%f,%f ", i+1, wheel_pos.x(), wheel_pos.y(), wheel_pos.z());
-            // printf("wheel %d velocity = %f,%f,%f ", i+1, wheel_vel.x(), wheel_vel.y(), wheel_vel.z());
-            // printf("wheel %d angvel = %f,%f,%f ", i+1, wheel_ang_v.x(), wheel_ang_v.y(), wheel_ang_v.z());
-            // printf("slip =%f\n", slip );
-
-            // myFile << wheel_pos.x()     << "\t" << wheel_pos.y()    << "\t" << wheel_pos.z()    << "\t"
-            //        << wheel_vel.x()     << "\t" << wheel_vel.y()    << "\t" << wheel_vel.z()    << "\t"
-            //        << wheel_ang_v.x()   << "\t" << wheel_ang_v.y()  << "\t" << wheel_ang_v.z()  << "\t"
-            //        << wheel_T.x()       << "\t" << wheel_T.y()      << "\t" << wheel_T.z()      << "\t"
-            //        << slip << "\t";
-
-            auto my_speed_function_new = chrono_types::make_shared<ChFunction_Const>(ang_motor); 
-            if (control_on == 1){// 1 means adaptively change the angular velocity
-                if(i==0){link_motor_speed_lf->SetSpeedFunction(my_speed_function_new);}
-                if(i==0){link_motor_speed_rf->SetSpeedFunction(my_speed_function_new);}
-                if(i==2){link_motor_speed_lm->SetSpeedFunction(my_speed_function_new);}
-                if(i==2){link_motor_speed_rm->SetSpeedFunction(my_speed_function_new);}
-                if(i==4){link_motor_speed_lb->SetSpeedFunction(my_speed_function_new);}
-                if(i==4){link_motor_speed_rb->SetSpeedFunction(my_speed_function_new);}                
-            }
-
-        }
-
 
         timer.start();
         sysFSI.DoStepDynamics_FSI();
@@ -464,7 +338,6 @@ void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
     box->SetBodyFixed(true);
     sysMBS.Add(box);
 
-
     // Fluid-Solid Coupling at the walls via BCE particles
     // sysFSI.AddContainerBCE(box, ChFrame<>(), ChVector<>(bxDim, byDim, bzDim), ChVector<int>(0, 0, -1));
     sysFSI.AddPointsBCE(box, BCE_Wall, ChFrame<>(), false);
@@ -473,7 +346,6 @@ void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
     // ============================================================================
     // ======================= Assemble the Curiosity =============================
     // ============================================================================
-
     double rover_mass = 0;
     // Create the Curiosity chassis
     {
@@ -813,23 +685,11 @@ void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
         // Body->AddAsset(masset_mesh);
     }
     }
-
-    {
-        // Create a body for the rigid soil container
-        // auto slope = chrono_types::make_shared<ChBodyEasyBox>(100, 100, 0.02, 1000, false, true, myMat);
-        // ChQuaternion<> Body_rot = Q_from_Euler123(ChVector<double>(0.0, CH_C_PI / 6.0, 0.0));
-        // slope->SetPos(ChVector<>(4, 0, 0));
-        // slope->SetRot(Body_rot);
-        // slope->SetBodyFixed(true);
-        // sysMBS.Add(slope);
-    }
-
     std::cout << "\n" << "The total mass of the Curiosity rover is " << rover_mass << "\n" << std::endl;
 
     // ============================================================================
     // ======================== constraints =======================================
     // ============================================================================
-
     // Create joint constraints for wheels
     for (int i = 0; i < 6; i++) {
         // pick up bodies and create links
