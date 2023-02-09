@@ -436,11 +436,11 @@ void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
         double RotAng;
         ChVector<> Body_Rel_pos;
         if(i==0){Body_Rel_pos = wheel_rel_pos_lf; RotAng = 0.0;}
-        if(i==1){Body_Rel_pos = wheel_rel_pos_rf; RotAng = CH_C_PI/2;}
+        if(i==1){Body_Rel_pos = wheel_rel_pos_rf; RotAng = CH_C_PI;}
         if(i==2){Body_Rel_pos = wheel_rel_pos_lm; RotAng = 0.0;}
-        if(i==3){Body_Rel_pos = wheel_rel_pos_rm; RotAng = CH_C_PI/2;}
+        if(i==3){Body_Rel_pos = wheel_rel_pos_rm; RotAng = CH_C_PI;}
         if(i==4){Body_Rel_pos = wheel_rel_pos_lb; RotAng = 0.0;}
-        if(i==5){Body_Rel_pos = wheel_rel_pos_rb; RotAng = CH_C_PI/2;}
+        if(i==5){Body_Rel_pos = wheel_rel_pos_rb; RotAng = CH_C_PI;}
         ChVector<> Body_pos = ChVector<>(init_loc.x(), 
                                          init_loc.y(),
                                          init_loc.z()) + Body_Rel_pos;
