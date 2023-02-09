@@ -62,7 +62,7 @@ ChVector<> init_loc(bxDim / 2.0 + 1.3, 0, 0.05);
 
 // Simulation time and stepsize
 double total_time = 25.0;
-double dT = 2.5e-4;
+double dT;
 
 // Save data as csv files to see the results off-line using Paraview
 bool output = true;
@@ -138,14 +138,14 @@ void SaveParaViewFiles(ChSystemFsi& sysFSI, ChSystemNSC& sysMBS, double mTime);
 void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI);
 
 int main(int argc, char* argv[]) {
-    
+    // The path to the Chrono data directory
     SetChronoDataPath(CHRONO_DATA_DIR);
 
     // Create a physical system and a corresponding FSI system
     ChSystemNSC sysMBS;
     ChSystemFsi sysFSI(&sysMBS);
 
-    // Read JSON file with simulation parameters
+    // Use JSON file to set the FSI parameters
     std::string inputJson = "../demo_ROBOT_Curiosity_Uphill.json";
     if (argc == 4) {
         total_mass = std::stod(argv[1]);
@@ -178,11 +178,16 @@ int main(int argc, char* argv[]) {
     sysFSI.ReadParametersFromFile(inputJson);
 
     double gravity_G = sysFSI.Get_G_acc().z();
-    ChVector<> gravity = ChVector<>(gravity_G * sin(slope_angle), 0, gravity_G * cos(slope_angle));
+    ChVector<> gravity = ChVector<>(0, 0, gravity_G);
     sysMBS.Set_G_acc(gravity * (total_mass / 900.0));
-    sysFSI.Set_G_acc(gravity);
 
+    // Get the simulation stepsize
+    dT = sysFSI.GetStepSize();
+
+    // Get the initial particle spacing
     iniSpacing = sysFSI.GetInitialSpacing();
+
+    // Get the SPH kernel length
     kernelLength = sysFSI.GetKernelLength();
 
     // // Set the initial particle spacing
@@ -194,8 +199,8 @@ int main(int argc, char* argv[]) {
     // // Set the terrain density
     // sysFSI.SetDensity(density);
 
-    // Set the simulation stepsize
-    sysFSI.SetStepSize(dT);
+    // // Set the simulation stepsize
+    // sysFSI.SetStepSize(dT);
 
     // Set the simulation domain size
     sysFSI.SetContainerDim(ChVector<>(bxDim, byDim, bzDim));
@@ -216,7 +221,6 @@ int main(int argc, char* argv[]) {
     sysFSI.SetSPHMethod(FluidDynamics::WCSPH);
 
     // Set the periodic boundary condition
-    double initSpace0 = sysFSI.GetInitialSpacing();
     ChVector<> cMin(-bxDim / 2 * 3, -byDim / 2 - 0.5 * iniSpacing, -bzDim * 2);
     ChVector<> cMax( bxDim / 2 * 3,  byDim / 2 + 0.5 * iniSpacing,  bzDim * 2);
     sysFSI.SetBoundaries(cMin, cMax);
@@ -225,9 +229,9 @@ int main(int argc, char* argv[]) {
     sysFSI.SetOutputLength(0);
 
     // Create an initial box for the terrain patch
-    chrono::utils::GridSampler<> sampler(initSpace0);
+    chrono::utils::GridSampler<> sampler(iniSpacing);
     ChVector<> boxCenter(0, 0, bzDim / 2);
-    ChVector<> boxHalfDim(bxDim / 2.0 * 2.1, byDim / 2, bzDim / 2 + 15 * initSpace0);
+    ChVector<> boxHalfDim(bxDim / 2.0 * 2.1, byDim / 2, bzDim / 2 + 15 * iniSpacing);
     std::vector<ChVector<>> points = sampler.SampleBox(boxCenter, boxHalfDim);
     int numPart = (int)points.size();
     for (int i = 0; i < numPart; i++) {
@@ -236,17 +240,17 @@ int main(int argc, char* argv[]) {
         double z_ini = points[i].z();
         double hL_top = L_top / 2.0; // half length of the top of the heap
         double z_max;
-        if(abs(x_ini) > hL_top + 0.001*initSpace0 && abs(x_ini) < bxDim / 2){
-            z_max = bzDim * (abs(bxDim / 2) - abs(x_ini)) / (abs(bxDim / 2) - hL_top) + 0.001*initSpace0;
+        if(abs(x_ini) > hL_top + 0.001*iniSpacing && abs(x_ini) < bxDim / 2){
+            z_max = bzDim * (abs(bxDim / 2) - abs(x_ini)) / (abs(bxDim / 2) - hL_top) + 0.001*iniSpacing;
         }
-        else if(abs(x_ini) < hL_top + 0.001*initSpace0){
-            z_max = bzDim + 0.001*initSpace0;
+        else if(abs(x_ini) < hL_top + 0.001*iniSpacing){
+            z_max = bzDim + 0.001*iniSpacing;
         }
         else{
             z_max = 0.0;
         }
-        double z_mid = z_max - 10*initSpace0;
-        double z_low = z_max - 15*initSpace0;
+        double z_mid = z_max - 10*iniSpacing;
+        double z_low = z_max - 15*iniSpacing;
         if(z_ini < z_max){
             if(z_ini > z_mid){
                 if(x_ini < bxDim  && x_ini > -bxDim ){
@@ -297,15 +301,8 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        auto Rover = sysMBS.Get_bodylist()[1];
-        ChFrame<> ref_frame = Rover->GetFrame_REF_to_abs();
-        ChVector<> pos = ref_frame.GetPos();
-        ChQuaternion<> rot = ref_frame.GetRot();
-        ChVector<> vel = Rover->GetPos_dt();
-        printf("Rover Pos =%f,%f,%f\n", pos.x(), pos.y(), pos.z());
-        printf("Rover Vel =%f,%f,%f\n", vel.x(), vel.y(), vel.z());
-        printf("Rover Rot =%f,%f,%f,%f\n", rot.e0(), rot.e1(), rot.e2(), rot.e3());
-        Rover->SetPos_dt(ChVector<>(vel.x(), 0.0, vel.z()));
+        ChVector<> vel = body->GetPos_dt();
+        body->SetPos_dt(ChVector<>(vel.x(), 0.0, vel.z()));
 
         timer.start();
         sysFSI.DoStepDynamics_FSI();
@@ -326,9 +323,6 @@ int main(int argc, char* argv[]) {
 // BCE representations are created and added to the systems
 //------------------------------------------------------------------
 void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
-    // Get the initial SPH particle spacing
-    double initSpace0 = sysFSI.GetInitialSpacing();
-
     // My material surface for contact
     auto myMat = CustomWheelMaterial(ChContactMethod::NSC);
 
@@ -475,7 +469,7 @@ void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
         // Add this body to the FSI system
         sysFSI.AddFsiBody(Body);
         double inner_radius = wheel_radius - grouser_height;
-        sysFSI.AddWheelBCE_Grouser(Body, ChFrame<>(), inner_radius, wheel_wide - initSpace0, 
+        sysFSI.AddWheelBCE_Grouser(Body, ChFrame<>(), inner_radius, wheel_wide - iniSpacing, 
             grouser_height, grouser_wide, grouser_num, kernelLength, false);
     }
     }

@@ -60,7 +60,7 @@ int grouser_num = 24;
 
 double wheel_slip = 0.0;
 double wheel_vel = 0.2;
-double wheel_AngVel = 0.8; //wheel_vel / (wheel_radius * (1.0 - wheel_slip));;
+double wheel_AngVel = 0.8;
 double total_mass = 17.5;
 std::string wheel_obj = "robot/viper/obj/viper_wheel.obj";
 
@@ -70,7 +70,7 @@ ChVector<> wheel_IniVel(0.0, 0.0, 0.0);
 
 // Simulation time and stepsize
 double total_time = 20.0;
-double dT = 2.5e-4;
+double dT;
 
 // linear actuator and angular actuator
 auto actuator = chrono_types::make_shared<ChLinkLinActuator>();
@@ -261,7 +261,7 @@ void CreateSolidPhase(ChSystemSMC& sysMBS, ChSystemFsi& sysFSI) {
 // =============================================================================
 
 int main(int argc, char* argv[]) {
-    
+    // The path to the Chrono data directory
     SetChronoDataPath(CHRONO_DATA_DIR);
 
     // Create the MBS and FSI systems
@@ -270,7 +270,7 @@ int main(int argc, char* argv[]) {
 
     sysFSI.SetVerbose(verbose_fsi);
 
-    // Use the default input file or you may enter your input parameters as a command line argument
+    // Use JSON file to set the FSI parameters
     std::string inputJson = "../demo_FSI_SingleWheelTest_VV_mode.json";
     if (argc == 4) {
         total_mass = std::stod(argv[1]);
@@ -303,8 +303,16 @@ int main(int argc, char* argv[]) {
 
     sysFSI.ReadParametersFromFile(inputJson);
 
+    // Get the simulation stepsize
+    dT = sysFSI.GetStepSize();
+
+    // Get the initial particle spacing
     iniSpacing = sysFSI.GetInitialSpacing();
+
+    // Get the SPH kernel length
     kernelLength = sysFSI.GetKernelLength();
+
+    // Set the gravity for the MB system
     sysMBS.Set_G_acc(sysFSI.Get_G_acc());
 
     // // Set the initial particle spacing
@@ -316,8 +324,8 @@ int main(int argc, char* argv[]) {
     // // Set the terrain density
     // sysFSI.SetDensity(density);
 
-    // Set the simulation stepsize
-    sysFSI.SetStepSize(dT);
+    // // Set the simulation stepsize
+    // sysFSI.SetStepSize(dT);
 
     // Set the terrain container size
     sysFSI.SetContainerDim(ChVector<>(bxDim, byDim, bzDim));

@@ -41,8 +41,8 @@ using namespace chrono::viper;
 double iniSpacing;
 double kernelLength;
 double density;
-double slope_angle; // Terrain slope 
-double total_mass; // 1.0 means using default mass 440kg
+double slope_angle;
+double total_mass;
 
 // output directories and settings
 std::string out_dir = "/root/sbel/outputs/FSI_Viper_RealSlope_SlopeAngle_";
@@ -57,7 +57,7 @@ ChVector<> init_loc( 1.0 - bxDim / 2.0, 0, bzDim + 0.25);
 
 // Simulation time and stepsize
 double total_time = 20.0;
-double dT = 2.5e-4;
+double dT;
 
 // Save data as csv files to see the results off-line using Paraview
 bool output = true;
@@ -126,14 +126,14 @@ void SaveParaViewFiles(ChSystemFsi& sysFSI, ChSystemNSC& sysMBS, double mTime);
 void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI);
 
 int main(int argc, char* argv[]) {
-    
+    // The path to the Chrono data directory
     SetChronoDataPath(CHRONO_DATA_DIR);
 
     // Create a physical system and a corresponding FSI system
     ChSystemNSC sysMBS;
     ChSystemFsi sysFSI(&sysMBS);
 
-    // Read JSON file with simulation parameters
+    // Use JSON file to set the FSI parameters
     std::string inputJson = "../demo_ROBOT_Viper_RealSlope.json";
     if (argc == 4) {
         total_mass = std::stod(argv[1]);
@@ -170,7 +170,13 @@ int main(int argc, char* argv[]) {
     sysMBS.Set_G_acc(gravity);
     sysFSI.Set_G_acc(gravity);
 
+    // Get the simulation stepsize
+    dT = sysFSI.GetStepSize();
+
+    // Get the initial particle spacing
     iniSpacing = sysFSI.GetInitialSpacing();
+
+    // Get the SPH kernel length
     kernelLength = sysFSI.GetKernelLength();
 
     // // Set the initial particle spacing
@@ -182,8 +188,8 @@ int main(int argc, char* argv[]) {
     // // Set the terrain density
     // sysFSI.SetDensity(density);
 
-    // Set the simulation stepsize
-    sysFSI.SetStepSize(dT);
+    // // Set the simulation stepsize
+    // sysFSI.SetStepSize(dT);
 
     // Set the simulation domain size
     sysFSI.SetContainerDim(ChVector<>(bxDim, byDim, bzDim));
@@ -204,7 +210,6 @@ int main(int argc, char* argv[]) {
     sysFSI.SetSPHMethod(FluidDynamics::WCSPH);
 
     // Set the periodic boundary condition
-    double initSpace0 = sysFSI.GetInitialSpacing();
     ChVector<> cMin(-bxDim / 2 * 2, -byDim / 2 - 0.5 * iniSpacing, -bzDim * 10);
     ChVector<> cMax(bxDim / 2 * 2, byDim / 2  + 0.5 * iniSpacing, bzDim * 20);
     sysFSI.SetBoundaries(cMin, cMax);
@@ -213,7 +218,7 @@ int main(int argc, char* argv[]) {
     sysFSI.SetOutputLength(0);
 
     // Create an initial box for the terrain patch
-    chrono::utils::GridSampler<> sampler(initSpace0);
+    chrono::utils::GridSampler<> sampler(iniSpacing);
     ChVector<> boxCenter(0, 0, bzDim / 2);
     ChVector<> boxHalfDim(bxDim / 2, byDim / 2, bzDim / 2);
     std::vector<ChVector<>> points = sampler.SampleBox(boxCenter, boxHalfDim);
@@ -235,10 +240,6 @@ int main(int argc, char* argv[]) {
 
     // Complete construction of the FSI system
     sysFSI.Initialize();
-
-    // Get the body from the FSI system for visualization
-    std::vector<std::shared_ptr<ChBody>>& FSI_Bodies = sysFSI.GetFsiBodies();
-    auto Rover = FSI_Bodies[0];
 
     // Write position and velocity to file
     std::ofstream ofile;
@@ -263,6 +264,7 @@ int main(int argc, char* argv[]) {
     double time = 0.0;
     int current_step = 0;
 
+    // Get the chassis of the rover
     auto body = sysMBS.Get_bodylist()[1];
 
     ChTimer<> timer;
@@ -313,9 +315,6 @@ void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
     box->SetBodyFixed(true);
     sysMBS.Add(box);
 
-    // Get the initial SPH particle spacing
-    double initSpace0 = sysFSI.GetInitialSpacing();
-
     // Fluid-Solid Coupling at the walls via BCE particles
     sysFSI.AddContainerBCE(box, ChFrame<>(), ChVector<>(bxDim, byDim, 2 * bzDim), ChVector<int>(2, 0, -1));
 
@@ -333,7 +332,7 @@ void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
     // trimesh->RepairDuplicateVertexes(1e-9);                              // if meshes are not watertight
 
     // std::vector<ChVector<>> BCE_wheel;
-    // sysFSI.CreateMeshPoints(*trimesh, initSpace0, BCE_wheel);
+    // sysFSI.CreateMeshPoints(*trimesh, iniSpacing, BCE_wheel);
 
     // Set the rover mass to a user mass
     for (int i = 0; i < 17; i++) {
@@ -368,7 +367,7 @@ void CreateSolidPhase(ChSystemNSC& sysMBS, ChSystemFsi& sysFSI) {
         //     sysFSI.AddPointsBCE(wheel_body, BCE_wheel, ChFrame<>(VNULL, QUNIT), true);
         // }
         double inner_radius = wheel_radius-grouser_height;
-        sysFSI.AddWheelBCE_Grouser(wheel_body, ChFrame<>(), inner_radius, wheel_wide - initSpace0, 
+        sysFSI.AddWheelBCE_Grouser(wheel_body, ChFrame<>(), inner_radius, wheel_wide - iniSpacing, 
             grouser_height, grouser_wide, grouser_num, kernelLength, false);
     }
 
