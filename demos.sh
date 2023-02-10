@@ -23,7 +23,7 @@ cd /root/sbel/demos/single_wheel_real_slope_mode/build/ && ./demo_FSI_SingleWhee
 cd /root/sbel/demos/single_wheel_real_slope_mode/build/ && ./demo_FSI_SingleWheelTest_RealSlope_mode 17.5 30 0.8
 
 cp /root/sbel/demos/single_wheel_real_slope_mode/slope_slip_wheel_realSlope_mode.py /root/sbel/outputs/
-cd /root/sbel/outputs/ && slope_slip_wheel_realSlope_mode.py
+cd /root/sbel/outputs/ && python3 slope_slip_wheel_realSlope_mode.py
 echo "Finished single wheel test under real slope mode"
 
 echo "Start Running VIPER and Curiosity demo"
