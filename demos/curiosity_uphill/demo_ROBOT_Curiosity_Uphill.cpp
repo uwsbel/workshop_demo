@@ -67,7 +67,7 @@ double dT;
 // Save data as csv files to see the results off-line using Paraview
 bool output = true;
 bool save_obj = false;  // if true, save as Wavefront OBJ; if false, save as VTK
-int out_fps = 10;
+int out_fps = 1;
 
 // Enable/disable run-time visualization (if Chrono::OpenGL is available)
 bool render = false;
