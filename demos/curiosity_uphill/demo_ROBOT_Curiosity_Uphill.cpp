@@ -146,7 +146,7 @@ int main(int argc, char* argv[]) {
     ChSystemFsi sysFSI(&sysMBS);
 
     // Use JSON file to set the FSI parameters
-    std::string inputJson = "../demo_ROBOT_Curiosity_Uphill.json";
+    std::string inputJson = "/root/sbel/json/demo_ROBOT_Curiosity_Uphill.json";
     if (argc == 4) {
         total_mass = std::stod(argv[1]);
         hill_height = std::stod(argv[2]);

@@ -134,7 +134,7 @@ int main(int argc, char* argv[]) {
     ChSystemFsi sysFSI(&sysMBS);
 
     // Use JSON file to set the FSI parameters
-    std::string inputJson = "root/sbel/json/demo_ROBOT_Viper_RealSlope.json";
+    std::string inputJson = "/root/sbel/json/demo_ROBOT_Viper_RealSlope.json";
     if (argc == 4) {
         total_mass = std::stod(argv[1]);
         slope_angle = std::stod(argv[2]) / 180.0 * CH_C_PI;
