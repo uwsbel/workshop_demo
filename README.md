@@ -26,15 +26,21 @@ Pulling the Docker image by running:
 
 ## Running a container based on an image
 
-After building the image using either method, run a container using the command:
+After building the image using either method, create and get into a container using the command:
 
-```docker run -it --gpus all -v <dir_to_store_data>:/root/sbel/outputs uwsbel/demo ```
+```docker run -it --gpus all -v <dir_to_store_data>:/root/sbel/outputs -v <dir_to_json_inputs>:/root/sbel/json uwsbel/demo ```
 
-Note: ```<dir_to_store_data>``` is the host machine directory where you want to store the output data from the demos. ```/root/sbel/outpus``` is the directory in the container.
-Windows user will run something like:```docker run -it --gpus all -v C:\Users\SBEL\demo_output\:/root/sbel/outputs uwsbel/demo```
-Linux user will run something like: ```docker run -it --gpus all -v /home/harry/workshop_demo/outputs/:/root/sbel/outputs uwsbel/demo```  
-Then, you should be get into container.
+Note: 
+- ```<dir_to_store_data>``` is the host machine directory where you want to store the output data from the demos. 
+- ```<dir_to_json_inputs>``` is the host machine directory of json inputs. 
+- ```/root/sbel/outputs``` is the output directory in the container.
+- ```/root/sbel/json``` is the json input directory in the container.
 
+```<dir_to_store_data>``` and ```<dir_to_json_inputs>``` depends on your operating system and work directory.
+
+Windows user will have something like:```C:\Users\SBEL\demo_output\``` and ``` C:\Users\SBEL\workshop_demo\json```.
+
+Linux user will have something like: ```/home/harry/workshop_demo/outputs/``` and ```/home/harry/workshop_demo/json/```
 
 ## Run the demo
 Single wheel test under VV mode
