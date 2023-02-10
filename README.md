@@ -30,7 +30,7 @@ After building the image using either method, run a container using the command:
 
 ```docker run -it --gpus all -v <dir_to_store_data>:/root/sbel/outputs uwsbel/demo ```
 
-Note: ```<dir_to_store_data>``` is the directory where you want to store the output data from the demos on your host machine.
+Note: ```<dir_to_store_data>``` is the host machine directory where you want to store the output data from the demos. ```/root/sbel/outpus``` is the directory in the container.
 Windows user will run something like:```docker run -it --gpus all -v C:\Users\SBEL\demo_output\:/root/sbel/outputs uwsbel/demo```
 Linux user will run something like: ```docker run -it --gpus all -v /home/harry/workshop_demo/outputs/:/root/sbel/outputs uwsbel/demo```  
 Then, you should be get into container.
