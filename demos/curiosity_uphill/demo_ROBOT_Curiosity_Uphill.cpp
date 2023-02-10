@@ -71,7 +71,7 @@ int out_fps = 10;
 
 // Enable/disable run-time visualization (if Chrono::OpenGL is available)
 bool render = false;
-float render_fps = 10;
+float render_fps = 1;
 
 // wheel specifics
 double wheel_radius = 0.25;

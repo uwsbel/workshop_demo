@@ -106,8 +106,9 @@ RUN rm -rf ${BLENDER_PATH}/python/lib/python3.10/site-packages/numpy
 RUN ${BLENDERPY} -m ensurepip && ${BLENDERPIP} install --upgrade pip && ${BLENDERPIP} install numpy mathutils
 
 #install python for postprocessing
-RUN apt-get update && apt-get install -y python3 python3-pip
+RUN apt-get update && apt-get install -y python3 python3-pip ffmpeg
 RUN pip install numpy matplotlib
-
+COPY demos.sh /root/sbel/
+RUN chmod u+x demos.sh
 
 ENTRYPOINT ["/bin/bash"]
