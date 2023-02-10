@@ -11,14 +11,9 @@ Once getting into folder, running the following to build docker image from Docke
 
 ``` docker build -t <img_name> . ```
 
-Notice that you can put a tag name for the image you build by using flag -t. After building it, run a container using the command:
+Notice that you can put a tag name for the image you build by using flag -t. For example,
+``` docker build -t uwsbel/demo . ```
 
-```docker run -it --gpus all -v <dir_to_store_data>:/root/sbel/outputs uwsbel/demo ```
-
-Note: ```<dir_to_store_data>``` is the directory of where you want to store the demo’s output data in your host machine. 
-Windows user will run something like:```docker run -it --gpus all -v C:\Users\SBEL\demo_output\:/root/sbel/outputs uwsbel/demo```
-Linux user will run something like: ```docker run -it --gpus all -v /home/harry/workshop_demo/outputs/:/root/sbel/outputs uwsbel/demo```  
-Then, you should be get into container.
 
 ### Method 2 ---- Pulling Our Docker Image
 
@@ -26,18 +21,16 @@ Pulling the Docker image by running:
 
 ```docker pull uwsbel/demo```
 
-Check if the docker image is in your local machine by running:
 
-```docker images```
+After building it, run a container using the command:
 
-you should see an image called “uwsbel/demo” with a tag called “latest”. Then running a container with the image you pulled by running:
+```docker run -it --gpus all -v <dir_to_store_data>:/root/sbel/outputs uwsbel/demo ```
 
-```docker run -it --gpus all -v <dir_to_store_data>:/root/sbel/outputs uwsbel/demo```
-
-Note: ```<dir_to_store_data>``` is the directory of where you want to store the demo’s output data in your host machine. 
+Note: ```<dir_to_store_data>``` is the directory where you want to store the output data from the demos on your host machine.
 Windows user will run something like:```docker run -it --gpus all -v C:\Users\SBEL\demo_output\:/root/sbel/outputs uwsbel/demo```
 Linux user will run something like: ```docker run -it --gpus all -v /home/harry/workshop_demo/outputs/:/root/sbel/outputs uwsbel/demo```  
 Then, you should be get into container.
+
 
 ## Run the demo
 Single wheel test under VV mode
