@@ -1,7 +1,7 @@
 # workshop_demo
 The Chrono demos are containerized with Docker. Here are some instructions how to set up container on your machine so that you can successfully run the demo.
 
-## Installation
+## Building an image
 ### Method 1 ---- Build from scratch 
 Open a terminal in your machine then run 
 
@@ -12,7 +12,10 @@ Once getting into folder, running the following to build docker image from Docke
 ``` docker build -t <img_name> . ```
 
 Notice that you can put a tag name for the image you build by using flag -t. For example,
+
 ``` docker build -t uwsbel/demo . ```
+
+builds an image named uwsbel/demo.
 
 
 ### Method 2 ---- Pulling Our Docker Image
@@ -21,8 +24,9 @@ Pulling the Docker image by running:
 
 ```docker pull uwsbel/demo```
 
+## Running a container based on an image
 
-After building it, run a container using the command:
+After building the image using either method, run a container using the command:
 
 ```docker run -it --gpus all -v <dir_to_store_data>:/root/sbel/outputs uwsbel/demo ```
 
