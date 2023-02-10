@@ -271,7 +271,7 @@ int main(int argc, char* argv[]) {
     sysFSI.SetVerbose(verbose_fsi);
 
     // Use JSON file to set the FSI parameters
-    std::string inputJson = "../demo_FSI_SingleWheelTest_VV_mode.json";
+    std::string inputJson = "/root/sbel/json/demo_FSI_SingleWheelTest_VV_mode.json";
     if (argc == 4) {
         total_mass = std::stod(argv[1]);
         wheel_slip = std::stod(argv[2]);
