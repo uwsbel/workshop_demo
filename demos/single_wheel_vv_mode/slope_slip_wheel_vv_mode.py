@@ -96,7 +96,7 @@ for k in range(1):
             slip.append(i/10.0)
             slope.append(atan(sumsum/numnum/(17.5*9.81))*180/math.pi)
 
-    plt.plot(slip,slope,linestyle=line_style[k],marker=marker_s[k],markersize=14,label=line_label,linewidth=3)
+    plt.plot(slip,slope,color='orange',linestyle=line_style[k],marker='D',markersize=14,label=line_label,linewidth=3)
 
 
                 
@@ -108,7 +108,7 @@ plt.gca().add_artist(l1)
 ax1=plt.gca()
 # ax1.set_title(title_name,fontsize=14,weight='bold')
 ax1.set_xlabel('Slip',fontsize=14,weight='bold')
-ax1.set_ylabel('Slope (deg)',fontsize=14,weight='bold')
+ax1.set_ylabel('Traction slope (deg)',fontsize=14,weight='bold')
 ax1.set_xlim([-0.1,1.0])
 ax1.set_ylim([-20,60])
 ax1.tick_params(axis='both',direction='in')

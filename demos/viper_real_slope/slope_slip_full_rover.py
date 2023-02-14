@@ -97,7 +97,7 @@ for k in range(1):
         else:
             slope.append((i-7)*2.0 + 32.0)
 
-    plt.plot(slip,slope,linestyle=line_style[k],marker=marker_s[k],markersize=14,label=line_label,linewidth=3)
+    plt.plot(slip,slope,color='orange',linestyle=line_style[k],marker='D',markersize=14,label=line_label,linewidth=3)
 
 plt.grid(linestyle='--')
 l2=plt.legend(loc='upper left',fontsize=14,ncol=2)

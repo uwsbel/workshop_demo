@@ -9,7 +9,7 @@ marker_s=['o','D','s','^','v','p','D','p','1','<','>','d']
 line_color=['b','g','c','c','m','y','k','b','g','r','c','m']
 
 result_name = "FSI_Single_Wheel_Test_RealSlope_mode"
-line_label  = r'Real slope, $\varphi=42.0,\rho=1734$'
+line_label  = r'Earth, $\varphi=42.0,\rho=1734$'
 
 title_name="Single Wheel Simulation, m=17.5(kg), GRC3"
 fig_name="Single_Wheel_17_5kg_GRC3_RealSlope_Mode.png"
@@ -101,7 +101,7 @@ for k in range(1):
         else:
             slope.append((i-7)*2.0 + 32.0)
 
-    plt.plot(slip,slope,linestyle=line_style[k],marker=marker_s[k],markersize=14,label=line_label,linewidth=3)
+    plt.plot(slip,slope,color='orange',linestyle=line_style[k],marker='D',markersize=14,label=line_label,linewidth=3)
                 
 plt.grid(linestyle='--')
 l2=plt.legend(loc='upper left',fontsize=14,ncol=1)
