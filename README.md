@@ -51,7 +51,7 @@ Single wheel test under VV mode
 - 0.3 is slip ratio that would like to enforce
 - 3 is just an ID for this slip
 
-Sinle wheel test under real slope mode
+Single wheel test under real slope mode
 
 ```./demo_FSI_SingleWheelTest_RealSlope_mode 17.5 15 0.8```
 
